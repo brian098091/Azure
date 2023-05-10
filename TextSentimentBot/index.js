@@ -33,22 +33,56 @@ async function MS_TextSentimentAnalysis(thisEvent){
     const analyticsClient = new TextAnalyticsClient(endpoint, new AzureKeyCredential(apiKey));
     let documents = [];
     documents.push(thisEvent.message.text);
-    const results = await analyticsClient.analyzeSentiment(documents);
+    const results = await analyticsClient.analyzeSentiment(documents,"zh-Hant",{includeOpinionMining: true});
     console.log("[results] ",JSON.stringify(results));
 
     const echo = {
         type:'text',
         text:results[0].sentiment
     };
-    
+    // 正面回應
     if(echo.text == "positive")
-        echo.text = "正向,分數:" + results[0].confidenceScores.positive
+    {
+        // 是否回傳主詞
+        if(results[0].sentences[0].opinions[0] != null)
+        {
+            echo.text = "您對"+results[0].sentences[0].opinions[0].target.text + "的評價是正向的\n分數:" +  results[0].confidenceScores.positive
+        }
+        else
+        {
+            echo.text = "正向,分數:" + results[0].confidenceScores.positive
+        }
+        
+        
+    }
+    // 中立回應    
     else if(echo.text == "neutral")
-        echo.text = "中立,分數:" + results[0].confidenceScores.neutral
+    {
+        if(results[0].sentences[0].opinions[0] != null)
+        {
+            echo.text = "您對"+results[0].sentences[0].opinions[0].target.text + "的評價是中立的\n分數:" +  results[0].confidenceScores.neutral
+        }
+        else
+        {
+            echo.text = "中立,分數:" + results[0].confidenceScores.neutral
+        }
+    } 
+    // 負面回應
     else 
-        echo.text = "負面,分數:" + results[0].confidenceScores.negative
+    {
+        if(results[0].sentences[0].opinions[0] != null)
+        {
+            echo.text = "您對"+results[0].sentences[0].opinions[0].target.text + "的評價是負面的\n分數:" +  results[0].confidenceScores.negative
+        }
+        else
+        {
+            echo.text = "負面,分數:" + results[0].confidenceScores.negative
+        }
+    }
+        
 
     return client.replyMessage(thisEvent.replyToken, echo);
+    
 }
 
 

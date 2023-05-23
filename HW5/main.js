@@ -38,8 +38,10 @@ function processImage() {
         //顯示JSON內容
         $("#responseTextArea").val(JSON.stringify(data, null, 2));
         $("#picDescription").empty();
+        // 若沒找到文字則顯示"No text found"
         if(data.orientation == "NotDetected")
             $("#picDescription").append("No text found")
+        // 有找到文字，將單字拼起來
         else{
             $("#picDescription").append("Text : <br>")
             for (var x = 0; x < data.regions[0].lines.length;x++){
@@ -88,11 +90,17 @@ function processImageFile(imageObject) {
         //顯示JSON內容
         $("#responseTextArea").val(JSON.stringify(data, null, 2));
         $("#picDescription").empty();
-        $("#picDescription").append("Text : <br>")
-        for (var x = 0; x < data.regions[0].lines.length;x++){
-            for(var y = 0; y<data.regions[0].lines[x].words.length ; y++)
-                $("#picDescription").append(data.regions[0].lines[x].words[y].text + " ")
-            $("#picDescription").append("<br>")
+        // 若沒找到文字則顯示"No text found"
+        if(data.orientation == "NotDetected")
+            $("#picDescription").append("No text found")
+        // 有找到文字，將單字拼起來
+        else{
+            $("#picDescription").append("Text : <br>")
+            for (var x = 0; x < data.regions[0].lines.length;x++){
+                for(var y = 0; y<data.regions[0].lines[x].words.length ; y++)
+                    $("#picDescription").append(data.regions[0].lines[x].words[y].text + " ")
+                $("#picDescription").append("<br>")
+            }
         }
     })
     .fail(function(jqXHR, textStatus, errorThrown) {

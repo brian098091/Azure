@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "config": "^3.3.9",
+    "fs": "^0.0.1-security",
+    "microsoft-cognitiveservices-speech-sdk": "^1.28.0"
+  }
+}

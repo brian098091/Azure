@@ -23,7 +23,7 @@ function processTranslate() {
             xhrObj.setRequestHeader("Content-Type","application/json");
             xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
             // 如果不是設定全域，就要加上這一行指定你所選擇的區域
-            // xhrObj.setRequestHeader("Ocp-Apim-Subscription-Region", "eastus");
+            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Region", "eastus");
         },
         type: "POST",
         // Request body
